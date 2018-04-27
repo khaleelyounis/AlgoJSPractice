@@ -18,7 +18,7 @@
 function matrix(n) {
     const result = [];
     for (let i = 0; i < n; i++) {
-        results.push([]);
+        result.push([]);
     }
     let counter = 1;
     let startColumn = 0;
@@ -27,8 +27,34 @@ function matrix(n) {
     let endRow = n - 1;
 
     while (startColumn <= endColumn && startRow <= endRow) {
+        //Top Row
+        for (let i = startColumn; i <= endColumn; i++) {
+            result[startRow][i] = counter;
+            counter++;
+        }
+        startRow++;
 
+        //Right Column
+        for (let i = startRow; i <= endRow; i++) {
+            result[i][endRow] = counter;
+            counter++;
+        }
+        endColumn--;
+
+        //Bottom Row
+        for (let i = endColumn; i >= startColumn; i--) {
+            result[endRow][i] = counter;
+            counter++;
+        }
+        endRow--;
+
+        for (let i = endRow; i >= startRow; i--) {
+            result[i][startColumn] = counter;
+            counter++;
+        }
+        startColumn++;
     }
+    return result;
 }
 
 module.exports = matrix;
