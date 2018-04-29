@@ -12,6 +12,7 @@ function reverse(str) {
 
 module.exports = reverse;
 
+//Linear runtime complexity (N)
 // function reverse(str) {
 //     return str.split('').reverse().join('');
 // }
