@@ -8,6 +8,17 @@
 // Example:
 //   fib(4) === 3
 
+//Recursive function is O(2^N) -- Terrible runtime complexity ~ The worst..
+function fib(n) {
+    if (n < 2) {
+        return n;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+module.exports = fib;
+
+//Runtime Complexity is O(n)
 function fib(n) {
     let results = [0, 1];
     for (let i = 2; i <= n; i++) {
@@ -15,5 +26,3 @@ function fib(n) {
     }
     return results[n];
 }
-
-module.exports = fib;
