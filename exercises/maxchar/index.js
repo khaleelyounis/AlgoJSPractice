@@ -5,6 +5,7 @@
 // maxChar("abcccccccd") === "c"
 // maxChar("apple 1231111") === "1"
 
+//runtime complexity is O(n+m)
 function maxChar(str) {
     let chars = {};
     let max = 0;
