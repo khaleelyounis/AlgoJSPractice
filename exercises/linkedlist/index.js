@@ -76,6 +76,67 @@ class LinkedList {
 
     previous.next = null;
   }
+
+  insertLast(data) {
+    const node = new Node(data);
+    const last = this.getLast();
+
+    if (last) {
+      last.next = node;
+    } else {
+      this.head = node;
+    }
+  }
+
+  getAt(index) {
+    let counter = 0;
+    let node = this.head;
+
+    while (node) {
+      if (counter === index) {
+        return node;
+      }
+
+      node = node.next;
+      counter++;
+    }
+
+    return null;
+  }
+
+  removeAt(index) {
+    if (!this.head) {
+      return null;
+    }
+
+    if (index === 0) {
+      this.head = this.head.next;
+      return;
+    }
+
+    const previous = this.getAt(index - 1);
+    if (!previous || !previous.next) {
+      return;
+    }
+    previous.next = previous.next.next;
+  }
+
+  insertAt(data, index) {
+    if (!this.head) {
+      this.head = new Node(data);
+      return;
+    }
+
+    if (index === 0) {
+      this.head = new Node(data, this.head);
+      return;
+    }
+
+    const previous = this.getAt(index - 1) || this.getLast();
+    const node = new Node(data, previous.next);
+
+    previous.next = node;
+  }
 }
 
 module.exports = {
