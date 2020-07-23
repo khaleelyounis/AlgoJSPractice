@@ -6,56 +6,100 @@
 // minSwap(s) = 2;
 // the index 0, 2 swap, the index 1,5 swap
 
-const determineValidString = (s) => {
-  if (!s.length) {
-    return false;
-  }
+const swap = (str, i, j) => {
+  let arr = str.split('');
+  let t = arr[i];
 
-  if (s.indexOf(')') < 0 || s.indexOf('(') < 0) {
-    return false;
-  }
+  arr[i] = arr[j];
+  arr[j] = t;
 
-  let imbalanceCounter = 0;
-  const stringArr = s.split('');
-
-  for (let str of stringArr) {
-    if (str === '(') {
-      imbalanceCounter++;
-    } else if (str === ')') {
-      imbalanceCounter--;
-    } else {
-      return false;
-    }
-  }
-
-  return imbalanceCounter === 0;
+  return arr.join('');
 };
 
-const minSwap = (s) => {
-  if (!determineValidString(s)) {
-    return 'Invalid input string';
+const replaceMatchingParan = (str) => {
+  return str.replace(/()/g, '');
+};
+
+const createRange = (first, last) => {
+  const result = [];
+
+  for (let i = first; first < last; first++) {
+    result.push(first);
   }
 
-  const invalid_closed = [];
-  const invalid_open = [];
+  return result;
+};
 
-  for (let i = 0; i < s.length; i++) {
-    if (s[i] === '(') {
-      if (i === s.length - 1 || s[i + 1] !== ')') {
-        invalid_open.push(i);
-      }
-    } else if (s[i] === ')') {
-      if (s[i - 1] !== '(') {
-        invalid_closed.push(i);
-      }
+const findInvalidStr = (str) => {
+  let firstOpen = 0;
+  let lastClose = 0;
+  let invalidOpen;
+  let invalidClose;
+
+  str = replaceMatchingParan(str);
+
+  if (!str.length) {
+    return [[], []];
+  }
+
+  for (let i of str) {
+    if (i === '(') {
+      firstOpen = i;
     }
   }
 
-  if (invalid_closed.length !== invalid_open.length) {
-    return false;
-  } else {
-    return invalid_closed.length;
+  let reversedStr = str.split('').reverse().join('');
+
+  for (let i of reversedStr) {
+    if (i === ')') {
+      lastClose = str.length - 1 - i;
+    }
   }
+
+  if (firstOpen < lastClose) {
+    let res = findInvalidStr(
+      str.slice(0, firstOpen) + str.slice(lastClose, str.length),
+    );
+    invalidOpen = res[0];
+    invalidClose = res[1];
+  }
+
+  if (firstOpen > lastClose) {
+    invalidOpen = [];
+    invalidClose = [];
+  }
+
+  invalidOpen += [createRange(lastClose + 1, str.length)];
+  invalidClose += [createRange(0, firstOpen)];
+  return [invalidOpen, invalidClose];
+};
+
+const minSwap = (str) => {
+  let count = 0;
+  let numInvalidOpen = 0;
+  let numInvalidClose = 0;
+  let res;
+
+  while (true) {
+    str = replaceMatchingParan(str);
+    res = findInvalidStr(str);
+    numInvalidOpen = res[0].length;
+    numInvalidClose = res[1].length;
+
+    if (numInvalidOpen !== numInvalidClose) {
+      return 'Invalid';
+    }
+
+    if (numInvalidOpen === 0) {
+      break;
+    }
+
+    str = swap(str, Math.max.apply(null, res[0]), Math.min.apply(null, res[1]));
+    str = replaceMatchingParan(str);
+    count += 1;
+  }
+
+  return count;
 };
 
 module.exports = minSwap;
